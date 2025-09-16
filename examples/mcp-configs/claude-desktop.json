@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "c2pa-docs": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "c2pa-docs-server:latest"
+      ],
+      "env": {
+        "GITHUB_TOKEN": ""
+      }
+    }
+  }
+}
