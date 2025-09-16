@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "c2pa-docs": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "c2pa-docs-server:latest"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "INFO"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "search_c2pa_spec",
+        "get_c2pa_github_docs",
+        "list_c2pa_examples",
+        "get_c2pa_api_reference",
+        "spec.search",
+        "github.get",
+        "examples.list",
+        "api.ref"
+      ]
+    }
+  }
+}
