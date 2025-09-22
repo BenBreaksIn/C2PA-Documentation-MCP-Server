@@ -1,0 +1,6 @@
+model = "gpt-5-codex"
+
+[mcp_servers.c2pa-docs-server]
+command = "docker"
+args = ["run", "--rm", "-i", "c2pa-docs-server:latest"]
+env = { "GITHUB_TOKEN" = "" }
