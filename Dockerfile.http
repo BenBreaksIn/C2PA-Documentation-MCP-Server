@@ -1,0 +1,32 @@
+FROM python:3.11-slim
+
+# Minimal OS deps and consistent certs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8080 \
+    # pass a token at runtime if you have one
+    GITHUB_TOKEN=""
+
+WORKDIR /app
+
+# Install Python deps first for better layer caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy HTTP version of the server
+COPY main_http.py ./main.py
+
+# Create and use an unprivileged user
+RUN useradd -m appuser
+USER appuser
+
+# Expose port for HTTP server
+EXPOSE 8080
+
+# Run the HTTP server
+CMD ["python", "main.py"]

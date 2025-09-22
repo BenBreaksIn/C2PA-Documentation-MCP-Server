@@ -232,22 +232,22 @@ def _decode_github_file(item: Dict[str, Any]) -> str:
 async def list_tools() -> List[Tool]:
     return [
         Tool(
-            name="spec.search",
+            name="mcp_c2pa_docs_specsearch",
             description="Semantic-ish search over the official C2PA spec with section permalinks",
             inputSchema=SearchSpecInput.model_json_schema()
         ),
         Tool(
-            name="github.get",
+            name="mcp_c2pa_docs_githubget",
             description="Fetch a file or list a directory from official C2PA GitHub repos",
             inputSchema=GetGithubDocsInput.model_json_schema()
         ),
         Tool(
-            name="examples.list",
+            name="mcp_c2pa_docs_exampleslist",
             description="List example files across language repos",
             inputSchema=ListExamplesInput.model_json_schema()
         ),
         Tool(
-            name="api.ref",
+            name="mcp_c2pa_docs_apiref",
             description="Return API reference URLs for c2pa libs",
             inputSchema=ApiRefInput.model_json_schema()
         ),
@@ -256,7 +256,7 @@ async def list_tools() -> List[Tool]:
 @app.call_tool()
 async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
     try:
-        if name == "spec.search":
+        if name == "mcp_c2pa_docs_specsearch":
             inp = SearchSpecInput(**arguments)
             await ensure_spec_index()
             # rank chunks
@@ -277,7 +277,7 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
             ) if hits else f"No matches found for '{inp.query}'."
             return [TextContent(type="text", text=md)]
 
-        if name == "github.get":
+        if name == "mcp_c2pa_docs_githubget":
             inp = GetGithubDocsInput(**arguments)
             data = await github_contents(inp.repo, inp.path)
             if isinstance(data, list):
@@ -291,7 +291,7 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
                 body = content if content.strip() else "(no previewable content)"
                 return [TextContent(type="text", text=header + body)]
 
-        if name == "examples.list":
+        if name == "mcp_c2pa_docs_exampleslist":
             inp = ListExamplesInput(**arguments)
             lang_map = {
                 "rust": ["rs"],
@@ -315,7 +315,7 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
             md = "\n\n".join(buckets) if buckets else "No examples found."
             return [TextContent(type="text", text=md)]
 
-        if name == "api.ref":
+        if name == "mcp_c2pa_docs_apiref":
             inp = ApiRefInput(**arguments)
             doc_paths = {
                 "rust": "https://docs.rs/c2pa/latest/c2pa/",
